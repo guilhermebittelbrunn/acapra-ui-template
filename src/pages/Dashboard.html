@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acapra Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../components/Sidebar.css">
+  <link rel="stylesheet" href="../components/Header.css">
+  <link rel="stylesheet" href="../components/DashboardStats.css">
+  <link rel="stylesheet" href="../components/AdoptionRequestsTable.css">
+  <link rel="stylesheet" href="../components/RecentActivities.css">
+  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary-color: #3a5a40;
+      --secondary-color: #6b7280;
+      --background-color: #f8f9fb;
+      --main-font: 'Inter', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--main-font);
+      background: var(--background-color);
+      color: #22223b;
+    }
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--background-color);
+    }
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-left: 250px;
+      transition: margin-left 0.3s;
+    }
+    .dashboard-content {
+      padding: 0px 24px;
+    }
+    .sidebar {
+      transition: transform 0.3s;
+      z-index: 201;
+    }
+    #sidebar-toggle {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-main {
+        margin-left: 60px;
+      }
+      .dashboard-main {
+        margin-left: 0;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        width: 250px;
+        max-width: 90vw;
+        transform: translateX(-100%);
+        z-index: 201;
+        background: #f8f9fb;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+      }
+      #sidebar-toggle:checked ~ .dashboard-layout .sidebar {
+        transform: translateX(0);
+      }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.15);
+        z-index: 200;
+      }
+      #sidebar-toggle:checked ~ .sidebar-backdrop {
+        display: block;
+      }
+      .hamburger-label {
+        display: none;
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 201;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 0.4rem 0.5rem;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+      }
+      .hamburger-label svg {
+        display: block;
+      }
+      .hamburger-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sidebar-backdrop {
+        z-index: 200;
+      }
+    }
+  </style>
+  <script>
+    // Fecha o menu ao clicar no backdrop
+    document.addEventListener('DOMContentLoaded', function() {
+      var backdrop = document.querySelector('.sidebar-backdrop');
+      var checkbox = document.getElementById('sidebar-toggle');
+      if (backdrop && checkbox) {
+        backdrop.addEventListener('click', function() {
+          checkbox.checked = false;
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <input type="checkbox" id="sidebar-toggle" />
+  <label for="sidebar-toggle" class="hamburger-label" aria-label="Abrir menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </label>
+  <div class="sidebar-backdrop"></div>
+  <div class="dashboard-layout">
+    <!-- Sidebar HTML -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">Acapra</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="sidebar-section-title">Gerenciar</li>
+          <li><a href="#" class="active"><span class="sidebar-icon" aria-label="Dashboard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="7" height="8"/><rect x="14" y="8" width="7" height="13"/><rect x="14" y="3" width="7" height="4"/><rect x="3" y="3" width="7" height="8"/></svg></span>Dashboard</a></li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Animals"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a2.5 2.5 0 0 0 2.5-2.5V17a2.5 2.5 0 0 0-2.5-2.5H6.5A2.5 2.5 0 0 0 4 17v-.5A2.5 2.5 0 0 0 6.5 19h11z"/><circle cx="12" cy="7" r="4"/></svg></span>Animais</a></li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Requests"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span>Requisições</a></li>
+          <li class="sidebar-section-title">Conteúdo</li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Posts"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>Publicações</a></li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Tags & Species"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11.41 4.23a2 2 0 0 0-2.83 0l-5.18 5.18a2 2 0 0 0 0 2.83l9.18 9.18a2 2 0 0 0 2.83 0l5.18-5.18a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span>Tags & Espécies</a></li>
+          <li class="sidebar-section-title">Sistema</li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Users"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Usuários</a></li>
+          <li><a href="#"><span class="sidebar-icon" aria-label="Settings"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 12 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Configurações</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+          <div>
+            <span class="sidebar-user-name">Admin</span>
+            <span class="sidebar-user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="dashboard-main">
+      <!-- Header HTML -->
+      <header class="header">
+        <div class="header-title">Dashboard</div>
+        <div class="header-actions">
+          <button class="header-action-btn" aria-label="Toggle theme"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></span></button>
+          <button class="header-action-btn" aria-label="Notifications"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span></button>
+          <div class="header-user">
+            <span class="header-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+            <span class="header-user-name">Administrador</span>
+          </div>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <!-- Dashboard Stats HTML -->
+        <section class="dashboard-stats">
+          <div class="dashboard-stat-card">
+            <div class="dashboard-stat-title">Animais Disponíveis</div>
+            <div class="dashboard-stat-value">42</div>
+            <a href="#" class="dashboard-stat-link">Ver todas</a>
+          </div>
+          <div class="dashboard-stat-card">
+            <div class="dashboard-stat-title">Adoções Pendentes</div>
+            <div class="dashboard-stat-value">15</div>
+            <a href="#" class="dashboard-stat-link">Ver todas</a>
+          </div>
+          <div class="dashboard-stat-card">
+            <div class="dashboard-stat-title">Total de Requisições</div>
+            <div class="dashboard-stat-value">87</div>
+            <a href="#" class="dashboard-stat-link">Ver detalhes</a>
+          </div>
+          <div class="dashboard-stat-card">
+            <div class="dashboard-stat-title">Espécies Registradas</div>
+            <div class="dashboard-stat-value">8</div>
+            <a href="#" class="dashboard-stat-link">Gerenciar</a>
+          </div>
+        </section>
+        <div class="dashboard-main-row">
+          <div class="dashboard-main-col">
+            <!-- Adoption Requests Table HTML -->
+            <section class="adoption-requests">
+              <div class="adoption-requests-header">
+                <h2>Últimas Requisições</h2>
+                <div class="adoption-requests-filters">
+                  <input type="text" placeholder="Buscar por nome..." class="adoption-requests-search" />
+                  <button class="adoption-requests-filter-btn">Todos os status</button>
+                  <button class="adoption-requests-filter-btn">Mais filtros</button>
+                </div>
+              </div>
+              <div class="adoption-requests-table-wrapper">
+                <table class="adoption-requests-table">
+                  <thead>
+                    <tr>
+                      <th>Animal</th>
+                      <th>Interessado</th>
+                      <th>Status</th>
+                      <th>Data</th>
+                      <th>Observação</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Max<br><span class="adoption-requests-animal-info">Cachorro, 2 anos</span></td>
+                      <td>João Silva<br><span class="adoption-requests-email">joao@email.com</span></td>
+                      <td><span class="adoption-requests-status pending">Pendente</span></td>
+                      <td>23/04/2025</td>
+                      <td>Interessado em adotar, primeira visita agendada...</td>
+                      <td><span class="adoption-requests-actions">...</span></td>
+                    </tr>
+                    <tr>
+                      <td>Luna<br><span class="adoption-requests-animal-info">Gato, 1 ano</span></td>
+                      <td>Maria Oliveira<br><span class="adoption-requests-email">maria@email.com</span></td>
+                      <td><span class="adoption-requests-status approved">Aprovado</span></td>
+                      <td>21/04/2025</td>
+                      <td>Adoção finalizada, documentos assinados...</td>
+                      <td><span class="adoption-requests-actions">...</span></td>
+                    </tr>
+                    <tr>
+                      <td>Thor<br><span class="adoption-requests-animal-info">Cachorro, 3 anos</span></td>
+                      <td>Pedro Santos<br><span class="adoption-requests-email">pedro@email.com</span></td>
+                      <td><span class="adoption-requests-status rejected">Recusado</span></td>
+                      <td>18/04/2025</td>
+                      <td>Ambiente inadequado para o animal</td>
+                      <td><span class="adoption-requests-actions">...</span></td>
+                    </tr>
+                    <tr>
+                      <td>Mia<br><span class="adoption-requests-animal-info">Gato, 6 meses</span></td>
+                      <td>Ana Costa<br><span class="adoption-requests-email">ana@email.com</span></td>
+                      <td><span class="adoption-requests-status pending">Pendente</span></td>
+                      <td>15/04/2025</td>
+                      <td>Visita domiciliar agendada para próxima semana</td>
+                      <td><span class="adoption-requests-actions">...</span></td>
+                    </tr>
+                    <tr>
+                      <td>Rex<br><span class="adoption-requests-animal-info">Cachorro, 4 anos</span></td>
+                      <td>Carlos Mendes<br><span class="adoption-requests-email">carlos@email.com</span></td>
+                      <td><span class="adoption-requests-status approved">Aprovado</span></td>
+                      <td>10/04/2025</td>
+                      <td>Adoção finalizada com sucesso</td>
+                      <td><span class="adoption-requests-actions">...</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="adoption-requests-pagination">
+                <button class="adoption-requests-page-btn active">1</button>
+                <button class="adoption-requests-page-btn">2</button>
+                <button class="adoption-requests-page-btn">3</button>
+              </div>
+            </section>
+          </div>
+          <aside class="dashboard-side-col">
+            <!-- Recent Activities HTML -->
+            <section class="recent-activities">
+              <h2 class="recent-activities-title">Atividades Recentes</h2>
+              <ul class="recent-activities-list">
+                <li><span class="recent-activities-user">Administrador</span> aprovou a adoção de Luna<br><span class="recent-activities-time">Hoje, 10:45</span></li>
+                <li><span class="recent-activities-user">Pedro Alves</span> adicionou um novo animal: Simba (Gato, 3 anos)<br><span class="recent-activities-time">Hoje, 09:12</span></li>
+                <li><span class="recent-activities-user">Ana Costa</span> submeteu uma nova requisição de adoção<br><span class="recent-activities-time">Ontem, 15:30</span></li>
+                <li><span class="recent-activities-user">Carlos Mendes</span> recusou a adoção de Thor<br><span class="recent-activities-time">Ontem, 11:20</span></li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html> 

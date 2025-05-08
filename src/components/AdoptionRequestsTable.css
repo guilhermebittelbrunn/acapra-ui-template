@@ -1,0 +1,187 @@
+:root {
+  --primary-color: #3a5a40;
+  --secondary-color: #6b7280;
+  --background-color: #f8f9fb;
+  --table-bg: #fff;
+  --table-border: #e5e7eb;
+  --table-radius: 1rem;
+  --table-font: 'Inter', sans-serif;
+}
+
+.adoption-requests {
+  background: var(--table-bg);
+  border-radius: var(--table-radius);
+  border: 1px solid var(--table-border);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  font-family: var(--table-font);
+}
+
+.adoption-requests-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.adoption-requests-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #22223b;
+}
+
+.adoption-requests-link {
+  color: var(--primary-color);
+  font-size: 0.95rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.adoption-requests-link:hover {
+  color: #22223b;
+}
+
+.adoption-requests-filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.adoption-requests-search {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--background-color);
+}
+
+.adoption-requests-filter-btn {
+  padding: 0.5rem 1.2rem;
+  background: #f3f4f6;
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #22223b;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.adoption-requests-filter-btn:hover {
+  background: #e9ecef;
+}
+
+.adoption-requests-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: transparent;
+  border-radius: 0.5rem;
+}
+
+.adoption-requests-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1.5rem;
+}
+
+.adoption-requests-table th,
+.adoption-requests-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.adoption-requests-table th {
+  color: var(--secondary-color);
+  font-weight: 600;
+  background: var(--background-color);
+  border-bottom: 1px solid var(--table-border);
+}
+
+.adoption-requests-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.adoption-requests-animal-info,
+.adoption-requests-email {
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+}
+
+.adoption-requests-status {
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  border-radius: 1em;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.adoption-requests-status.pending {
+  background: #fff7e6;
+  color: #b7791f;
+}
+.adoption-requests-status.approved {
+  background: #e6f7ec;
+  color: #2e7d32;
+}
+.adoption-requests-status.rejected {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.adoption-requests-actions {
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.adoption-requests-pagination {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.adoption-requests-page-btn {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #22223b;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.adoption-requests-page-btn.active,
+.adoption-requests-page-btn:hover {
+  background: #e9ecef;
+  color: var(--primary-color);
+}
+
+@media (max-width: 900px) {
+  .adoption-requests {
+    padding: 1rem;
+  }
+  .adoption-requests-header,
+  .adoption-requests-filters {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .adoption-requests-table th,
+  .adoption-requests-table td {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  .adoption-requests-table {
+    min-width: 600px;
+  }
+  .adoption-requests-table {
+    min-width: 500px;
+    font-size: 0.92rem;
+  }
+  .adoption-requests-table-wrapper {
+    padding-bottom: 0.5rem;
+  }
+}

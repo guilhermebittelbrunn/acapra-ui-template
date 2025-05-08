@@ -1,0 +1,63 @@
+:root {
+  --primary-color: #3a5a40;
+  --secondary-color: #6b7280;
+  --background-color: #f8f9fb;
+  --card-bg: #fff;
+  --card-border: #e5e7eb;
+  --card-radius: 1rem;
+  --card-font: 'Inter', sans-serif;
+}
+
+.recent-activities {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--card-border);
+  padding: 2rem;
+  font-family: var(--card-font);
+}
+
+.recent-activities-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22223b;
+  margin-bottom: 1.2rem;
+}
+
+.recent-activities-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-activities-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 1rem;
+  color: #22223b;
+}
+
+.recent-activities-list li:last-child {
+  border-bottom: none;
+}
+
+.recent-activities-user {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.recent-activities-time {
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .recent-activities {
+    padding: 1rem;
+  }
+  .recent-activities-title {
+    font-size: 1rem;
+  }
+  .recent-activities-list li {
+    font-size: 0.95rem;
+  }
+} 
