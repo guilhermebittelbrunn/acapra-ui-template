@@ -4,7 +4,7 @@ Trabalho acadêmico para a disciplina de desenvolvimento web.
 
 ## Acesso
 
-Acesse através [link](https://pip.pypa.io/en/stable/) to install foobar.
+Acesse através [link](https://guilhermebittelbrunn.github.io/acapra-ui-template/src).
 
 ## Alunos
 
