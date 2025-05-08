@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Publicação - Acapra Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../components/Sidebar.css">
+  <link rel="stylesheet" href="../components/Header.css">
+  <style>
+    :root {
+      --primary-color: #3a5a40;
+      --secondary-color: #6b7280;
+      --background-color: #f8f9fb;
+      --main-font: 'Inter', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--main-font);
+      background: var(--background-color);
+      color: #22223b;
+    }
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--background-color);
+    }
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-left: 250px;
+      transition: margin-left 0.3s;
+    }
+    .dashboard-content {
+      padding: 24px;
+    }
+    .sidebar {
+      transition: transform 0.3s;
+      z-index: 201;
+    }
+    #sidebar-toggle {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-main {
+        margin-left: 60px;
+      }
+    }
+    @media (max-width: 600px) {
+      .dashboard-main {
+        margin-left: 0;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        width: 250px;
+        max-width: 90vw;
+        transform: translateX(-100%);
+        z-index: 201;
+        background: #f8f9fb;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+      }
+      #sidebar-toggle:checked ~ .dashboard-layout .sidebar {
+        transform: translateX(0);
+      }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.15);
+        z-index: 200;
+      }
+      #sidebar-toggle:checked ~ .sidebar-backdrop {
+        display: block;
+      }
+    }
+    .hamburger-label {
+      display: none;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 201;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      padding: 0.4rem 0.5rem;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+    }
+    .hamburger-label svg {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .hamburger-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .sidebar-backdrop {
+      z-index: 200;
+    }
+    /* Estilos da página de nova publicação */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #22223b;
+    }
+    .page-content {
+      background: #fff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1.5rem;
+    }
+    .form-section {
+      margin-bottom: 2rem;
+    }
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+    .form-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #22223b;
+      margin-bottom: 1rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .form-label {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .form-input {
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #22223b;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #3a5a40;
+    }
+    .form-textarea {
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #22223b;
+      transition: border-color 0.2s;
+      min-height: 200px;
+      resize: vertical;
+    }
+    .form-textarea:focus {
+      outline: none;
+      border-color: #3a5a40;
+    }
+    .form-select {
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #22223b;
+      transition: border-color 0.2s;
+      background: #fff;
+    }
+    .form-select:focus {
+      outline: none;
+      border-color: #3a5a40;
+    }
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-checkbox input {
+      width: 1rem;
+      height: 1rem;
+    }
+    .form-checkbox label {
+      font-size: 0.95rem;
+      color: #22223b;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary {
+      background: #3a5a40;
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #2d4739;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+    }
+    .btn-secondary:hover {
+      background: #f8f9fb;
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .tag-item {
+      background: #f3f4f6;
+      color: #4b5563;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tag-item button {
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .tag-item button:hover {
+      color: #ef4444;
+    }
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var backdrop = document.querySelector('.sidebar-backdrop');
+      var checkbox = document.getElementById('sidebar-toggle');
+      if (backdrop && checkbox) {
+        backdrop.addEventListener('click', function() {
+          checkbox.checked = false;
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <input type="checkbox" id="sidebar-toggle" />
+  <label for="sidebar-toggle" class="hamburger-label" aria-label="Abrir menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </label>
+  <div class="sidebar-backdrop"></div>
+  <div class="dashboard-layout">
+    <!-- Sidebar HTML -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">Acapra</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="sidebar-section-title">Gerenciar</li>
+          <li><a href="../index.html"><span class="sidebar-icon" aria-label="Dashboard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="7" height="8"/><rect x="14" y="8" width="7" height="13"/><rect x="14" y="3" width="7" height="4"/><rect x="3" y="3" width="7" height="8"/></svg></span>Dashboard</a></li>
+          <li><a href="./Animais.html"><span class="sidebar-icon" aria-label="Animals"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a2.5 2.5 0 0 0 2.5-2.5V17a2.5 2.5 0 0 0-2.5-2.5H6.5A2.5 2.5 0 0 0 4 17v-.5A2.5 2.5 0 0 0 6.5 19h11z"/><circle cx="12" cy="7" r="4"/></svg></span>Animais</a></li>
+          <li><a href="./Requisicoes.html"><span class="sidebar-icon" aria-label="Requests"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span>Requisições</a></li>
+          <li class="sidebar-section-title">Conteúdo</li>
+          <li><a href="./Publicacoes.html" class="active"><span class="sidebar-icon" aria-label="Posts"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>Publicações</a></li>
+          <li><a href="./Tags.html"><span class="sidebar-icon" aria-label="Tags"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11.41 4.23a2 2 0 0 0-2.83 0l-5.18 5.18a2 2 0 0 0 0 2.83l9.18 9.18a2 2 0 0 0 2.83 0l5.18-5.18a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span>Tags</a></li>
+          <li><a href="./Especies.html"><span class="sidebar-icon" aria-label="Species"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Espécies</a></li>
+          <li class="sidebar-section-title">Sistema</li>
+          <li><a href="./Usuarios.html"><span class="sidebar-icon" aria-label="Users"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Usuários</a></li>
+          <li><a href="./Configuracoes.html"><span class="sidebar-icon" aria-label="Settings"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 12 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Configurações</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+          <div>
+            <span class="sidebar-user-name">Admin</span>
+            <span class="sidebar-user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="dashboard-main">
+      <!-- Header HTML -->
+      <header class="header">
+        <div class="header-title">Nova Publicação</div>
+        <div class="header-actions">
+          <button class="header-action-btn" aria-label="Toggle theme"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></span></button>
+          <button class="header-action-btn" aria-label="Notifications"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span></button>
+          <div class="header-user">
+            <span class="header-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+            <span class="header-user-name">Maria Silva</span>
+          </div>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <div class="page-header">
+          <h1 class="page-title">Nova Publicação</h1>
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="window.location.href='./Publicacoes.html'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              Voltar
+            </button>
+            <button class="btn btn-primary" onclick="window.location.href='./Publicacoes.html'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Salvar
+            </button>
+          </div>
+        </div>
+        <div class="page-content">
+          <form>
+            <div class="form-section">
+              <h2 class="form-section-title">Informações Básicas</h2>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="post-title">Título</label>
+                  <input type="text" id="post-title" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="post-author">Autor</label>
+                  <input type="text" id="post-author" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="post-date">Data de Publicação</label>
+                  <input type="date" id="post-date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="post-status">Status</label>
+                  <select id="post-status" class="form-select" required>
+                    <option value="draft">Rascunho</option>
+                    <option value="published">Publicado</option>
+                    <option value="archived">Arquivado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-section">
+              <h2 class="form-section-title">Conteúdo</h2>
+              <div class="form-group">
+                <label class="form-label" for="post-content">Conteúdo</label>
+                <textarea id="post-content" class="form-textarea" required></textarea>
+              </div>
+            </div>
+            <div class="form-section">
+              <h2 class="form-section-title">Tags</h2>
+              <div class="form-group">
+                <label class="form-label" for="post-tags">Adicionar Tags</label>
+                <input type="text" id="post-tags" class="form-input" placeholder="Digite e pressione Enter">
+                <div class="tag-list">
+                  <div class="tag-item">
+                    Animais
+                    <button type="button" aria-label="Remover tag">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <div class="tag-item">
+                    Cuidados
+                    <button type="button" aria-label="Remover tag">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-section">
+              <h2 class="form-section-title">Configurações</h2>
+              <div class="form-grid">
+                <div class="form-group">
+                  <div class="form-checkbox">
+                    <input type="checkbox" id="post-featured" checked>
+                    <label for="post-featured">Publicação em Destaque</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-checkbox">
+                    <input type="checkbox" id="post-comments" checked>
+                    <label for="post-comments">Permitir Comentários</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html> 

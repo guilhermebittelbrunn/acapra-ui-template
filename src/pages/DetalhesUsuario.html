@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Usuário - Acapra Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../components/Sidebar.css">
+  <link rel="stylesheet" href="../components/Header.css">
+  <style>
+    :root {
+      --primary-color: #3a5a40;
+      --secondary-color: #6b7280;
+      --background-color: #f8f9fb;
+      --main-font: 'Inter', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--main-font);
+      background: var(--background-color);
+      color: #22223b;
+    }
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--background-color);
+    }
+    .dashboard-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-left: 250px;
+      transition: margin-left 0.3s;
+    }
+    .dashboard-content {
+      padding: 24px;
+    }
+    .sidebar {
+      transition: transform 0.3s;
+      z-index: 201;
+    }
+    #sidebar-toggle {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-main {
+        margin-left: 60px;
+      }
+    }
+    @media (max-width: 600px) {
+      .dashboard-main {
+        margin-left: 0;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        width: 250px;
+        max-width: 90vw;
+        transform: translateX(-100%);
+        z-index: 201;
+        background: #f8f9fb;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+      }
+      #sidebar-toggle:checked ~ .dashboard-layout .sidebar {
+        transform: translateX(0);
+      }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.15);
+        z-index: 200;
+      }
+      #sidebar-toggle:checked ~ .sidebar-backdrop {
+        display: block;
+      }
+    }
+    .hamburger-label {
+      display: none;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 201;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      padding: 0.4rem 0.5rem;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+    }
+    .hamburger-label svg {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .hamburger-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .sidebar-backdrop {
+      z-index: 200;
+    }
+    /* Estilos da página de detalhes do usuário */
+    .user-details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .user-details-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #22223b;
+    }
+    .user-details-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    .btn-back {
+      background: #f3f4f6;
+      color: #22223b;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-back:hover {
+      background: #e5e7eb;
+    }
+    .btn-edit {
+      background: #3a5a40;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-edit:hover {
+      background: #2d4739;
+    }
+    .btn-delete {
+      background: #dc2626;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-delete:hover {
+      background: #b91c1c;
+    }
+    .user-details-content {
+      background: #fff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1.5rem;
+    }
+    .user-details-section {
+      margin-bottom: 2rem;
+    }
+    .user-details-section:last-child {
+      margin-bottom: 0;
+    }
+    .user-details-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #22223b;
+      margin-bottom: 1rem;
+    }
+    .user-details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .user-details-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .user-details-label {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .user-details-value {
+      font-size: 1rem;
+      color: #22223b;
+    }
+    .user-type {
+      display: inline-block;
+      padding: 0.3em 0.8em;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .type-admin {
+      background: #f0fdf4;
+      color: #166534;
+    }
+    .type-colaborator {
+      background: #f0f9ff;
+      color: #075985;
+    }
+    @media (max-width: 768px) {
+      .user-details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var backdrop = document.querySelector('.sidebar-backdrop');
+      var checkbox = document.getElementById('sidebar-toggle');
+      if (backdrop && checkbox) {
+        backdrop.addEventListener('click', function() {
+          checkbox.checked = false;
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <input type="checkbox" id="sidebar-toggle" />
+  <label for="sidebar-toggle" class="hamburger-label" aria-label="Abrir menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </label>
+  <div class="sidebar-backdrop"></div>
+  <div class="dashboard-layout">
+    <!-- Sidebar HTML -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">Acapra</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="sidebar-section-title">Gerenciar</li>
+          <li><a href="./Dashboard.html"><span class="sidebar-icon" aria-label="Dashboard"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="13" width="7" height="8" />
+                  <rect x="14" y="8" width="7" height="13" />
+                  <rect x="14" y="3" width="7" height="4" />
+                  <rect x="3" y="3" width="7" height="8" />
+                </svg></span>Dashboard</a></li>
+          <li><a href="./Animais.html"><span class="sidebar-icon" aria-label="Animals"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path
+                    d="M17.5 19a2.5 2.5 0 0 0 2.5-2.5V17a2.5 2.5 0 0 0-2.5-2.5H6.5A2.5 2.5 0 0 0 4 17v-.5A2.5 2.5 0 0 0 6.5 19h11z" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg></span>Animais</a></li>
+          <li><a href="./Requisicoes.html"><span class="sidebar-icon" aria-label="Requests"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4" />
+                  <path d="M8 2v4" />
+                  <path d="M3 10h18" />
+                </svg></span>Requisições</a></li>
+          <li class="sidebar-section-title">Conteúdo</li>
+          <li><a href="./Publicacoes.html"><span class="sidebar-icon" aria-label="Posts"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M3 9h18" />
+                  <path d="M9 21V9" />
+                </svg></span>Publicações</a></li>
+          <li><a href="./Tags.html"><span class="sidebar-icon" aria-label="Tags"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path
+                    d="M20.59 13.41L11.41 4.23a2 2 0 0 0-2.83 0l-5.18 5.18a2 2 0 0 0 0 2.83l9.18 9.18a2 2 0 0 0 2.83 0l5.18-5.18a2 2 0 0 0 0-2.83z" />
+                  <circle cx="7.5" cy="7.5" r="1.5" />
+                </svg></span>Tags</a></li>
+          <li><a href="./Especies.html"><span class="sidebar-icon" aria-label="Species"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
+                </svg></span>Espécies</a></li>
+          <li class="sidebar-section-title">Sistema</li>
+          <li><a href="./Usuarios.html"><span class="sidebar-icon" aria-label="Users"><svg width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg></span>Usuários</a></li>
+          <li><a href="./Configuracoes.html" class="active"><span class="sidebar-icon" aria-label="Settings"><svg width="24"
+                  height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 12 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg></span>Configurações</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+          <div>
+            <span class="sidebar-user-name">Admin</span>
+            <span class="sidebar-user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="dashboard-main">
+      <!-- Header HTML -->
+      <header class="header">
+        <div class="header-title">Detalhes do Usuário</div>
+        <div class="header-actions">
+          <button class="header-action-btn" aria-label="Toggle theme"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></span></button>
+          <button class="header-action-btn" aria-label="Notifications"><span class="header-action-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span></button>
+          <div class="header-user">
+            <span class="header-user-avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2A4.5 4.5 0 0 1 10 14.5h4A4.5 4.5 0 0 1 18.5 19v2"/></svg></span>
+            <span class="header-user-name">Maria Silva</span>
+          </div>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <div class="user-details-header">
+          <h1 class="user-details-title">Detalhes do Usuário</h1>
+          <div class="user-details-actions">
+            <button class="btn-back" onclick="window.location.href='./Usuarios.html'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Voltar
+            </button>
+            <button class="btn-edit" onclick="window.location.href='./EditarUsuario.html?id=USER-001'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Editar
+            </button>
+            <button class="btn-delete" onclick="window.location.href='./Usuarios.html?action=delete&id=USER-001'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Excluir
+            </button>
+          </div>
+        </div>
+        <div class="user-details-content">
+          <div class="user-details-section">
+            <h2 class="user-details-section-title">Informações Pessoais</h2>
+            <div class="user-details-grid">
+              <div class="user-details-item">
+                <span class="user-details-label">Nome</span>
+                <span class="user-details-value">João Silva</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Email</span>
+                <span class="user-details-value">joao.silva@email.com</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Tipo</span>
+                <span class="user-details-value"><span class="user-type type-admin">Administrador</span></span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Associação</span>
+                <span class="user-details-value">Associação Amigos dos Animais</span>
+              </div>
+            </div>
+          </div>
+          <div class="user-details-section">
+            <h2 class="user-details-section-title">Endereço</h2>
+            <div class="user-details-grid">
+              <div class="user-details-item">
+                <span class="user-details-label">Rua</span>
+                <span class="user-details-value">Rua das Flores, 123</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Bairro</span>
+                <span class="user-details-value">Centro</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Cidade</span>
+                <span class="user-details-value">São Paulo</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Estado</span>
+                <span class="user-details-value">SP</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">CEP</span>
+                <span class="user-details-value">01234-567</span>
+              </div>
+            </div>
+          </div>
+          <div class="user-details-section">
+            <h2 class="user-details-section-title">Informações do Sistema</h2>
+            <div class="user-details-grid">
+              <div class="user-details-item">
+                <span class="user-details-label">Data de Criação</span>
+                <span class="user-details-value">15/03/2024</span>
+              </div>
+              <div class="user-details-item">
+                <span class="user-details-label">Última Atualização</span>
+                <span class="user-details-value">15/03/2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html> 
